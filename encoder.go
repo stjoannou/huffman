@@ -4,6 +4,7 @@ import (
 	"encoding/hex"
 	"fmt"
 	"log"
+	"os"
 )
 
 var encoding = []string{
@@ -26,27 +27,34 @@ var encoding = []string{
 }
 
 func convert(s string) string {
+	var returnStr string
 	for i := 0; i < len(s); i++ {
 		decoded, err := hex.DecodeString("0" + string(s[i]))
 		if err != nil {
 			log.Fatal(err)
 		}
 		var dec = decoded[0] - 1
-		fmt.Printf("%s ", encoding[dec])
+		// fmt.Printf("%s ", encoding[dec])
+		returnStr += encoding[dec]
 
 	}
-	fmt.Printf("\n")
-	return ""
+	// fmt.Printf("\n")
+	return returnStr
 }
 
 func main() {
 	fmt.Printf("Huffman Encoder in Go\n")
 
-	src := []byte("Hello")
+	if len(os.Args) != 2 {
+		fmt.Printf("Usage: %s <string>\n", os.Args[0])
+		os.Exit(-1)
+	}
+
+	src := []byte(os.Args[1])
 	encodedStr := hex.EncodeToString(src)
 
-	fmt.Printf("%s\n", encodedStr)
+	fmt.Printf("Hex String [%s]\n", encodedStr)
 
-	convert(encodedStr)
+	fmt.Printf("Encoded: [%s]\n", convert(encodedStr))
 
 }
